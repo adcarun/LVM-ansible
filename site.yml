@@ -1,0 +1,28 @@
+---
+  - name: Install LVM stack
+    hosts: mmcc
+    
+    tasks:
+    - name: LVM creation    
+      lvol:
+        vg: dcpl_vg
+        lv: dcpl_lv1
+        size: 1024m	   
+  
+    - name: format LVM
+      filesystem:
+        fstype: ext4
+        dev: /dev/dcpl_vg/dcpl_lv1
+
+    - name: Mount LVM
+      mount:
+        name: /test1
+        src: /dev/dcpl_vg/dcpl_lv1
+        fstype: ext4
+        state: mounted
+
+    - name: copy files
+      copy:
+        src: /root/thesanjeevkumar.com.csr
+        dest: /test1
+        mode: 0777 
